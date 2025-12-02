@@ -7,31 +7,111 @@ import Solutions
 
 @main
 struct AoC2025 {
+
+    static var solutions: [Int: [Int: () async throws -> any Solution]] = [:]
+    static let fetcher: some InputFetching = CopyPastaFetcher(sampleData: false)
+
     static func main() async throws {
 
-        let fetcher = CopyPastaFetcher(sampleData: false)
-        let day1 = try await Day01(day: 1, year: 2025, inputFetcher: fetcher)
+        try await registerSolutions()
+        let (year, day) = try parseYearAndDay()
 
-        measuring(name: "Day01 - Part 1") { name in
-            let result = day1.solvePart1()
-            print("Result for \(name): \(result)")
+        guard let yearSolutions = solutions[year] else {
+            throw ExitError.noSolutionsFound
         }
 
-        measuring(name: "Day01 - Part 2") { name in
-            let result = day1.solvePart2()
-            print("Result for \(name): \(result)")
+        let solutionDays = day.map { [$0] } ?? yearSolutions.keys.sorted()
+
+        var builtSolutions: [any Solution] = []
+
+        for day in solutionDays {
+            guard let factory = yearSolutions[day] else {
+                print("No solution found for: \(year)-\(day)")
+                throw ExitError.noSolutionsFound
+            }
+
+            let solution = try await factory()
+            builtSolutions.append(solution)
+        }
+
+        for solution in builtSolutions {
+            runSolution(solution)
         }
 
     }
 
-    static func measuring(name: String, work: (String) -> Void) {
+    static func runSolution(_ solution: any Solution) {
+
+        measuring(name: "\(solution.year)-\(solution.day)-Part 1") {
+            return solution.solvePart1()
+        }
+
+        measuring(name: "\(solution.year)-\(solution.day)-Part 2") {
+            return solution.solvePart2()
+        }
+
+    }
+
+    static func registerSolutions() async throws {
+        solutions[2025] = [
+            1: { try await Day01(input: fetcher.inputFor(day: 1, year: 2025)) }
+        ]
+    }
+
+    static func measuring<Result>(name: String, work: () -> Result) {
         let clock = ContinuousClock()
         let start = clock.now
-        work(name)
+        let result = work()
         let elapsed = start.duration(to: clock.now)
-
-        print("\(name) took \(elapsed.asMicroSeconds)µs")
+        print("\(name) took \(elapsed.asMicroSeconds)µs - Result: \(result)")
     }
+
+    private static func parseYearAndDay() throws -> (year: Int, day: Int?) {
+        var year: Int?
+        var day: Int?
+
+        var iterator = CommandLine.arguments.dropFirst().makeIterator()
+        while let arg = iterator.next() {
+            switch arg {
+                case "--year", "-y":
+                    guard let value = iterator.next(), let int = Int(value) else {
+                        print("Missing or invalid value for \(arg)")
+                        throw ExitError.invalidArguments
+                    }
+                    year = int
+
+                case "--day", "-d":
+                    guard let value = iterator.next(), let int = Int(value) else {
+                        print("Missing or invalid value for \(arg)")
+                        throw ExitError.invalidArguments
+                    }
+                    day = int
+
+                case "--help", "-h":
+                    print(
+                        """
+                        Usage:
+                          advent --year <yyyy> --day <dd>
+
+                        Example:
+                          advent --year 2025 --day 1
+                        """)
+                    throw ExitError.invalidArguments
+
+                default:
+                    print("Unknown argument: \(arg)")
+                    throw ExitError.invalidArguments
+            }
+        }
+
+        return (year ?? 2025, day)
+    }
+
+}
+
+enum ExitError: Error {
+    case invalidArguments
+    case noSolutionsFound
 }
 
 extension Duration {

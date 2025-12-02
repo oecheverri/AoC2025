@@ -14,9 +14,9 @@ public struct CopyPastaFetcher: InputFetching, Sendable {
         self.fetchSampleData = sampleData
     }
 
-    public func input(
-        for day: Int,
-        in year: Int
+    public func inputFor(
+        day: Int,
+        year: Int
     ) async throws -> String {
         let inputs = fetchSampleData ? SampleInputs.inputs : RealInputs.inputs
         print("Year: \(year), Day: \(day)")

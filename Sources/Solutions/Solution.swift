@@ -10,11 +10,10 @@ public protocol Solution: Sendable {
 
     associatedtype Result
 
-    init(
-        day: Int,
-        year: Int,
-        inputFetcher: some InputFetching
-    ) async throws
+    var year: Int { get }
+    var day: Int { get }
+
+    init(input: String)
 
     func solvePart1() -> Result
     func solvePart2() -> Result

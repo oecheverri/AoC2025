@@ -16,6 +16,9 @@ let package = Package(
             dependencies: [
                 "Solutions",
                 "InputFetcher",
+            ],
+            swiftSettings: [
+                .defaultIsolation(MainActor.self)
             ]
         ),
         .target(

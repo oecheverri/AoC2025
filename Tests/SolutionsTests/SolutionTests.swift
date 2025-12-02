@@ -50,8 +50,6 @@ struct SolutionsTests {
 
 func makeDay1Solution(with fetcher: some InputFetching) async throws -> Day01 {
     try await Day01(
-        day: 1,
-        year: 2025,
-        inputFetcher: fetcher
+        input: fetcher.inputFor(day: 1, year: 2025)
     )
 }

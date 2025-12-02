@@ -14,8 +14,8 @@ public protocol InputFetching: Sendable {
 
     init(sampleData: Bool)
 
-    func input(
-        for problem: Int,
-        in year: Int
+    func inputFor(
+        day: Int,
+        year: Int
     ) async throws -> String
 }

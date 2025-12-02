@@ -8,19 +8,22 @@ import InputFetcher
 
 public struct Day01: Solution {
 
+    public var year: Int { 2025 }
+    public var day: Int { 1 }
+
     let sequence: [Int]
 
     public init(
-        day: Int,
-        year: Int,
-        inputFetcher: some InputFetching,
-    ) async throws {
-        sequence = try await inputFetcher.input(for: day, in: year)
+        input: String
+    ) {
+        sequence =
+            input
             .components(separatedBy: .newlines)
             .compactMap {
                 guard $0.count > 1,
                     let direction = $0.first,
-                    let value = Int($0[$0.index(after: $0.startIndex) ..< $0.endIndex])
+                    let value = Int($0[$0.index(after: $0.startIndex) ..< $0.endIndex]),
+                    direction == "R" || direction == "L"
                 else { return nil }
                 return direction == "R" ? value : -value
             }
