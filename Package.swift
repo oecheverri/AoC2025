@@ -14,14 +14,23 @@ let package = Package(
         .executableTarget(
             name: "AoC2025",
             dependencies: [
-                "Solutions"
+                "Solutions",
+                "InputFetcher"
             ]
         ),
-        .target(name: "InputFetcher"),
-        .target(name: "Solutions"),
+        .target(
+            name: "InputFetcher",
+        ),
+        .target(
+            name: "Solutions",
+            dependencies: ["InputFetcher"]
+        ),
         .testTarget(
             name: "SolutionsTests",
-            dependencies: ["Solutions"]
+            dependencies: [
+                "Solutions",
+                "InputFetcher"
+            ]
         ),
     ]
 )

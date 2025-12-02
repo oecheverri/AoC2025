@@ -4,21 +4,28 @@
 //  Copyright © 2025 Oscar Echeverri.  All rights reserved.
 //
 import Foundation
+import InputFetcher
 
-public struct Day01 {
+public struct Day01: Solution {
 
     let sequence: [Int]
-    public init(input: String) {
-        sequence = input.components(separatedBy: .newlines)
+    
+    public init (
+        day: Int,
+        year: Int,
+        inputFetcher: some InputFetching,
+    ) async throws {
+        sequence = try await inputFetcher.input(for: day, in: year)
+            .components(separatedBy: .newlines)
             .compactMap {
                 guard $0.count > 1,
-                    let direction = $0.first,
-                    let value = Int($0[$0.index(after: $0.startIndex)..<$0.endIndex])
+                      let direction = $0.first,
+                      let value = Int($0[$0.index(after: $0.startIndex)..<$0.endIndex])
                 else { return nil }
                 return direction == "R" ? value : -value
             }
     }
-    
+
     public func solvePart1() -> Int {
         
         var dial = RotaryDial(
