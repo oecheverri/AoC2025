@@ -4,15 +4,24 @@
 import PackageDescription
 
 let package = Package(
-  name: "AoC2025",
-  targets: [
-    // Targets are the basic building blocks of a package, defining a module or a test suite.
-    // Targets can depend on other targets in this package and products from dependencies.
-    .executableTarget(
-      name: "AoC2025"
-    ),
-    .target(name: "InputFetcher"),
-    .target(name: "Solutions"),
-    .testTarget(name: "SolutionsTests"),
-  ]
+    name: "AoC2025",
+    platforms: [
+        .macOS(.v26)
+    ],
+    targets: [
+        // Targets are the basic building blocks of a package, defining a module or a test suite.
+        // Targets can depend on other targets in this package and products from dependencies.
+        .executableTarget(
+            name: "AoC2025",
+            dependencies: [
+                "Solutions"
+            ]
+        ),
+        .target(name: "InputFetcher"),
+        .target(name: "Solutions"),
+        .testTarget(
+            name: "SolutionsTests",
+            dependencies: ["Solutions"]
+        ),
+    ]
 )
