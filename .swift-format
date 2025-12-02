@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "indentation": {
+    "spaces": 4,
+    "tabWidth": 4
+  },
+  "lineLength": 180,
+  "maximumBlankLines": 1,
+  "lineBreakBeforeEachArgument": false,
+  "lineBreakBeforeEachGenericRequirement": false,
+  "respectExistingLineBreaks": true,
+  "indentConditionalCompilationBlocks": true,
+  "indentSwitchCaseLabels": true,
+  "spacesAroundRangeFormationOperators": true
+}
