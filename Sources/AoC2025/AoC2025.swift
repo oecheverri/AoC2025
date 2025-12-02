@@ -9,13 +9,11 @@ import Solutions
 struct AoC2025 {
 
     static var solutions: [Int: [Int: () async throws -> any Solution]] = [:]
-    static let fetcher: some InputFetching = CopyPastaFetcher(sampleData: false)
 
     static func main() async throws {
 
-        try await registerSolutions()
-        let (year, day) = try parseYearAndDay()
-
+        let (year, day, useSampleData) = try parseYearAndDay()
+        try await registerSolutions(using: CopyPastaFetcher(sampleData: useSampleData))
         guard let yearSolutions = solutions[year] else {
             throw ExitError.noSolutionsFound
         }
@@ -52,9 +50,10 @@ struct AoC2025 {
 
     }
 
-    static func registerSolutions() async throws {
+    static func registerSolutions(using fetcher: any InputFetching) async throws {
         solutions[2025] = [
-            1: { try await Day01(input: fetcher.inputFor(day: 1, year: 2025)) }
+            1: { try await Day01(input: fetcher.inputFor(day: 1, year: 2025)) },
+            2: { try await Day02(input: fetcher.inputFor(day: 2, year: 2025)) },
         ]
     }
 
@@ -66,10 +65,10 @@ struct AoC2025 {
         print("\(name) took \(elapsed.asMicroSeconds)µs - Result: \(result)")
     }
 
-    private static func parseYearAndDay() throws -> (year: Int, day: Int?) {
+    private static func parseYearAndDay() throws -> (year: Int, day: Int?, useSampleData: Bool) {
         var year: Int?
         var day: Int?
-
+        var useSampleData = false
         var iterator = CommandLine.arguments.dropFirst().makeIterator()
         while let arg = iterator.next() {
             switch arg {
@@ -97,14 +96,15 @@ struct AoC2025 {
                           advent --year 2025 --day 1
                         """)
                     throw ExitError.invalidArguments
-
+                case "--use-samples":
+                    useSampleData = true
                 default:
                     print("Unknown argument: \(arg)")
                     throw ExitError.invalidArguments
             }
         }
 
-        return (year ?? 2025, day)
+        return (year ?? 2025, day, useSampleData)
     }
 
 }

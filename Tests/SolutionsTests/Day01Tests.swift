@@ -9,7 +9,7 @@ import Testing
 
 @testable import Solutions
 
-struct SolutionsTests {
+struct Day01Tests {
 
     static let fetcher = CopyPastaFetcher(sampleData: true)
     static let realFetcher = CopyPastaFetcher(sampleData: false)
