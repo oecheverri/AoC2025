@@ -7,17 +7,16 @@
 import InputFetcher
 
 public protocol Solution: Sendable {
-    
+
     associatedtype Result
-    
+
     init(
         day: Int,
         year: Int,
         inputFetcher: some InputFetching
     ) async throws
-    
+
     func solvePart1() -> Result
     func solvePart2() -> Result
-    
-    
+
 }

@@ -11,9 +11,9 @@ enum InputFetchingError: Error {
 }
 
 public protocol InputFetching: Sendable {
-    
+
     init(sampleData: Bool)
-    
+
     func input(
         for problem: Int,
         in year: Int

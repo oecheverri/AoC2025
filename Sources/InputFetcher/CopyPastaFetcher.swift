@@ -5,9 +5,9 @@
 //
 
 public struct CopyPastaFetcher: InputFetching, Sendable {
-    
+
     let fetchSampleData: Bool
-    
+
     public init(
         sampleData: Bool
     ) {
@@ -21,7 +21,7 @@ public struct CopyPastaFetcher: InputFetching, Sendable {
         let inputs = fetchSampleData ? SampleInputs.inputs : RealInputs.inputs
         print("Year: \(year), Day: \(day)")
         guard let yearInputs = inputs[year],
-              let input = yearInputs[day]
+            let input = yearInputs[day]
         else {
             throw InputFetchingError.noInputFound
         }

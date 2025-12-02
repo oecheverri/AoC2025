@@ -4,20 +4,21 @@
 //  Copyright © 2025 Oscar Echeverri.  All rights reserved.
 //
 
-import Testing
 import InputFetcher
+import Testing
+
 @testable import Solutions
 
 struct SolutionsTests {
-    
+
     static let fetcher = CopyPastaFetcher(sampleData: true)
     static let realFetcher = CopyPastaFetcher(sampleData: false)
-    
+
     @Test func `Day 01 - Data Parsing`() async throws {
         let sol = try await makeDay1Solution(with: Self.fetcher)
         #expect(sol.sequence.reduce(0, +) == -218)
     }
-    
+
     @Test(
         "Day 01 - Part 1",
         arguments: zip(
@@ -31,7 +32,7 @@ struct SolutionsTests {
 
         #expect(solution == expected)
     }
-    
+
     @Test(
         "Day 01 - Part 2",
         arguments: zip(
@@ -44,14 +45,13 @@ struct SolutionsTests {
         let solution = sol.solvePart2()
         #expect(solution == expected)
     }
-    
+
 }
 
-func makeDay1Solution(with fetcher: some InputFetching)  async throws -> Day01{
+func makeDay1Solution(with fetcher: some InputFetching) async throws -> Day01 {
     try await Day01(
         day: 1,
         year: 2025,
         inputFetcher: fetcher
     )
 }
-

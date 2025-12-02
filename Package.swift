@@ -15,7 +15,7 @@ let package = Package(
             name: "AoC2025",
             dependencies: [
                 "Solutions",
-                "InputFetcher"
+                "InputFetcher",
             ]
         ),
         .target(
@@ -29,7 +29,7 @@ let package = Package(
             name: "SolutionsTests",
             dependencies: [
                 "Solutions",
-                "InputFetcher"
+                "InputFetcher",
             ]
         ),
     ]
