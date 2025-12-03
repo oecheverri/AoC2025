@@ -48,6 +48,14 @@ struct AoC2025 {
             return solution.solvePart2()
         }
 
+        measuring(name: "\(solution.year)-\(solution.day)-Part 1 Opt") {
+            return try solution.solvePart1Optimized()
+        }
+
+        measuring(name: "\(solution.year)-\(solution.day)-Part 2 Opt") {
+            return try solution.solvePart2Optimized()
+        }
+
     }
 
     static func registerSolutions(using fetcher: any InputFetching) async throws {
@@ -57,12 +65,17 @@ struct AoC2025 {
         ]
     }
 
-    static func measuring<Result>(name: String, work: () -> Result) {
+    static func measuring<Result>(name: String, work: () throws -> Result) {
         let clock = ContinuousClock()
         let start = clock.now
-        let result = work()
+        let result: Result
+        do {
+            result = try work()
+        } catch {
+            return
+        }
         let elapsed = start.duration(to: clock.now)
-        print("\(name) took \(elapsed.asMicroSeconds)µs - Result: \(result)")
+        print("\(name) took \(elapsed.µsString) - Result: \(result)")
     }
 
     private static func parseYearAndDay() throws -> (year: Int, day: Int?, useSampleData: Bool) {
@@ -118,7 +131,10 @@ extension Duration {
     var asMicroSeconds: Int {
         let sec = components.seconds
         let attos = components.attoseconds
-
         return Int(sec * 1_000_000 + attos / 1_000_000_000_000)
+    }
+
+    var µsString: String {
+        "\(asMicroSeconds.formatted(.number.grouping(.automatic))) µs"
     }
 }

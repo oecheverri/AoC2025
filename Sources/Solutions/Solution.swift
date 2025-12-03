@@ -18,4 +18,23 @@ public protocol Solution: Sendable {
     func solvePart1() -> Result
     func solvePart2() -> Result
 
+    func solvePart1Optimized() throws -> Result
+    func solvePart2Optimized() throws -> Result
+
+}
+
+extension Solution {
+
+    public func solvePart1Optimized() throws -> Result {
+        throw SolutionError.notImplemented(#function)
+    }
+
+    public func solvePart2Optimized() throws -> Result {
+        throw SolutionError.notImplemented(#function)
+    }
+
+}
+
+enum SolutionError: Error {
+    case notImplemented(String)
 }

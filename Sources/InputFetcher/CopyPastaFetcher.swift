@@ -19,7 +19,6 @@ public struct CopyPastaFetcher: InputFetching, Sendable {
         year: Int
     ) async throws -> String {
         let inputs = fetchSampleData ? SampleInputs.inputs : RealInputs.inputs
-        print("Year: \(year), Day: \(day)")
         guard let yearInputs = inputs[year],
             let input = yearInputs[day]
         else {
