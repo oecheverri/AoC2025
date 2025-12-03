@@ -22,6 +22,7 @@ public struct CopyPastaFetcher: InputFetching, Sendable {
         guard let yearInputs = inputs[year],
             let input = yearInputs[day]
         else {
+            print("No input was found for day \(day), year \(year).")
             throw InputFetchingError.noInputFound
         }
         return input
