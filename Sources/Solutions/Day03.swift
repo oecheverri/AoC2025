@@ -38,6 +38,26 @@ public struct Day03: Solution {
         return tens * 10 + ones
     }
 
+    func findNLargestDigits(in array: [Int], n: Int) -> [Int] {
+
+        guard array.count >= n else { return [] }
+
+        var remainingSkips = array.count - n
+
+        var result = [Int]()
+
+        var currentIndex = result.startIndex
+        while result.count < n {
+            let maxIndex = array.indices[currentIndex ... currentIndex + remainingSkips].max { array[$0] < array[$1] }
+            guard let maxIndex else { return [] }
+            remainingSkips += array.distance(from: maxIndex, to: currentIndex)
+            result.append(array[maxIndex])
+            currentIndex = maxIndex + 1
+        }
+
+        return result
+    }
+
     public func solvePart1() -> Int {
         banks
             .map(findMaxValue)
@@ -45,7 +65,9 @@ public struct Day03: Solution {
     }
 
     public func solvePart2() -> Int {
-        0
+        banks
+            .map { findNLargestDigits(in: $0, n: 12).asSingleInt }
+            .reduce(0, +)
     }
 
 }
