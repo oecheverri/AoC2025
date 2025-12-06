@@ -31,7 +31,35 @@ public struct Day04: Solution {
     }
 
     public func solvePart2() -> Int {
-        0
+        var mutableGrid = rollGrid
+
+        var accumulated = 0
+        while true {
+            let moved = moveRolls(in: &mutableGrid)
+            guard moved > 0 else { break }
+            accumulated += moved
+        }
+
+        return accumulated
+
+    }
+
+    func moveRolls(in grid: inout [[Bool]]) -> Int {
+        let snapshot = grid
+        var moved = 0
+        return snapshot.enumerated().reduce(0) {
+            let (rowIndx, row) = $1
+            return row.indices.reduce($0) {
+
+                if snapshot.isForkliftAccessible(row: rowIndx, col: $1) {
+                    grid[rowIndx][$1] = true
+                    moved += 1
+                    return $0 + 1
+                }
+
+                return $0
+            }
+        }
     }
 
 }

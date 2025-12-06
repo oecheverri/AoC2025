@@ -16,4 +16,11 @@ struct Day04Tests {
 
         #expect(sol.solvePart1() == 13)
     }
+
+    @Test
+    func testSolutionForPart2() async throws {
+        let sol = try #require(try? await Day04(input: CopyPastaFetcher(sampleData: true).inputFor(day: 4, year: 2025)))
+
+        #expect(sol.solvePart2() == 43)
+    }
 }
