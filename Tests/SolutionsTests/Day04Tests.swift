@@ -1,10 +1,11 @@
-import InputFetcher
 //
 //  Day04Tests.swift
 //  AoC2025
 //
 //  Created by Oscar Echeverri on 2025-12-05.
 //
+
+import InputFetcher
 import Testing
 
 @testable import Solutions
