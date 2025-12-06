@@ -40,6 +40,8 @@ struct AoC2025 {
 
     static func runSolution(_ solution: any Solution) {
 
+        printHeader()
+
         measuring(name: "\(solution.year)-\(solution.day)-Part 1") {
             return solution.solvePart1()
         }
@@ -78,7 +80,47 @@ struct AoC2025 {
             return
         }
         let elapsed = start.duration(to: clock.now)
-        print("\(name) took \(elapsed.µsString) - Result: \(result)")
+        printResultRow(name: name, elapsed: elapsed, result: result)
+    }
+
+    static func printHeader() {
+        let part = "Solution".padded(to: ResultTableConfig.partWidth)
+        let micro = "Duration (µs)".padded(to: ResultTableConfig.microWidth)
+        let seconds = "Duration (s)".padded(to: ResultTableConfig.secondsWidth)
+        let result = "Result".padded(to: ResultTableConfig.resultWidth)
+
+        print("\(part) \(micro) \(seconds) \(result)")
+        print(
+            String(
+                repeating: "-",
+                count: ResultTableConfig.partWidth
+                    + ResultTableConfig.microWidth
+                    + ResultTableConfig.secondsWidth
+                    + ResultTableConfig.resultWidth
+                    + 3))  // spaces between columns
+    }
+
+    static func printResultRow<Result>(name: String, elapsed: Duration, result: Result) {
+        let col1 = name.padded(to: ResultTableConfig.partWidth)
+        let col2 = elapsed.µsString.padded(to: ResultTableConfig.microWidth, alignment: .right)
+        let col3 = ("(\(elapsed.sString))").padded(to: ResultTableConfig.secondsWidth, alignment: .right)
+        let col4 = "\(result)".padded(to: ResultTableConfig.resultWidth)
+
+        print("\(col1) \(col2) \(col3) \(col4)")
+    }
+
+    struct ResultTableConfig {
+        static let partWidth = 24
+        static let microWidth = 16
+        static let secondsWidth = 16
+        static let resultWidth = 8
+    }
+
+    struct ResultRow {
+        let part: String
+        let micro: String  // e.g. elapsed.µsString
+        let seconds: String  // e.g. elapsed.sString
+        let result: String  // "\(result)"
     }
 
     private static func parseYearAndDay() throws -> (year: Int, day: Int?, useSampleData: Bool) {
@@ -139,5 +181,27 @@ extension Duration {
 
     var µsString: String {
         "\(asMicroSeconds.formatted(.number.grouping(.automatic))) µs"
+    }
+
+    var asSeconds: Double {
+        let comps = components
+        return Double(comps.seconds)
+            + Double(comps.attoseconds) / 1_000_000_000_000_000_000
+    }
+
+    var sString: String {
+        "\(asSeconds.formatted(.number.precision(.fractionLength(9)))) s"
+    }
+}
+
+extension String {
+    enum Alignment { case left, right }
+
+    func padded(to width: Int, alignment: Alignment = .left) -> String {
+        let count = self.count
+        guard count < width else { return self }
+
+        let pad = String(repeating: " ", count: width - count)
+        return alignment == .left ? self + pad : pad + self
     }
 }
