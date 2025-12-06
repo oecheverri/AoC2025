@@ -63,6 +63,7 @@ struct AoC2025 {
             1: { try await Day01(input: fetcher.inputFor(day: 1, year: 2025)) },
             2: { try await Day02(input: fetcher.inputFor(day: 2, year: 2025)) },
             3: { try await Day03(input: fetcher.inputFor(day: 3, year: 2025)) },
+            4: { try await Day04(input: fetcher.inputFor(day: 4, year: 2025)) },
         ]
     }
 
