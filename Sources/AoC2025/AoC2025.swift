@@ -32,15 +32,15 @@ struct AoC2025 {
             builtSolutions.append(solution)
         }
 
+        printHeader()
         for solution in builtSolutions {
             runSolution(solution)
+            print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
         }
 
     }
 
     static func runSolution(_ solution: any Solution) {
-
-        printHeader()
 
         measuring(name: "\(solution.year)-\(solution.day)-Part 1") {
             return solution.solvePart1()

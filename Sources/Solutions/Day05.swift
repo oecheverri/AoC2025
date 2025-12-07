@@ -4,6 +4,7 @@
 //
 //  Created by Oscar Echeverri on 2025-12-06.
 //
+import Foundation
 
 public struct Day05: Solution {
     public let year: Int = 2025
@@ -37,8 +38,34 @@ public struct Day05: Solution {
         ingredients.count(where: isFresh(ingredient:))
     }
 
+    func mergeOverlappingRanges(_ ranges: [ClosedRange<Int>]) -> [ClosedRange<Int>] {
+
+        guard ranges.count > 1 else {
+            return ranges
+        }
+        let sortedRanges = ranges.sorted { $0.lowerBound < $1.lowerBound }
+        var mergedRanges: [ClosedRange<Int>] = []
+        for range in sortedRanges {
+
+            let mergeInto = mergedRanges.last
+
+            guard let mergeInto,
+                mergeInto.overlaps(range),
+                let merged = mergeInto.union(with: range)
+            else {
+                mergedRanges.append(range)
+                continue
+            }
+
+            mergedRanges[mergedRanges.endIndex.advanced(by: -1)] = merged
+        }
+
+        return mergedRanges
+    }
+
     public func solvePart2() -> Int {
-        0
+        mergeOverlappingRanges(ranges)
+            .reduce(0) { $0 + $1.count }
     }
 
     func isFresh(ingredient: Int) -> Bool {
@@ -50,4 +77,15 @@ public struct Day05: Solution {
         return false
     }
 
+}
+
+extension ClosedRange where Bound == Int {
+    func union(with other: Self) -> Self? {
+        guard self.overlaps(other) || self.upperBound == other.lowerBound - 1 || other.upperBound == self.lowerBound - 1 else {
+            return nil  // disjoint ranges can't form a single ClosedRange
+        }
+
+        return Swift.min(self.lowerBound, other.lowerBound)
+            ... Swift.max(self.upperBound, other.upperBound)
+    }
 }
